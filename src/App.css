@@ -30,7 +30,7 @@
 .youtube {
   display: inline-block;
   width: 50%;
-  
+
   margin-top: 20px;
 
 
@@ -39,5 +39,9 @@
 .banner-youtube {
   width: 100%;
   justify-content: center;
-  margin-top: -105px;
+  margin-bottom: -10px;
+}
+
+.title {
+  text-transform: capitalize;
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import img from '../banner-youtube.jpg';
+
 
 const API = 'AIzaSyC7QpXWVGr4jfBhRE9xpPnGL6DDURuprkY';
 const channelID = 'UC7O6CntQoAI-wYyJxYiqNUg';
-const maxResults = 9;
+const maxResults = 6;
 
 const finalURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelID}&maxResults=${maxResults}&key=${API}`
 
@@ -13,8 +13,8 @@ class Youtube extends React.Component {
 		super();
 
 		this.state = {
-			resultyt: [],
-			titleyt: ""
+			data: [],
+
 		};
 	}
 
@@ -22,72 +22,61 @@ class Youtube extends React.Component {
 		fetch(finalURL)
 			.then((response) => response.json())
 			.then((responseJson) => {
-				this.getVideo(responseJson);
-				this.getTitle(responseJson);
+				this.getData(responseJson);
+
 			})
 
-			
+
 			.catch((error) => {
-			console.error(error);	
+			console.error(error);
 			});
 	}
-
-	getVideo(responseJson){
-		const resultyt = responseJson.items.map((item) => {
-					return "https://www.youtube.com/embed/" + item.id.videoId;
+	getData(responseJson){
+		const data = responseJson.items.map((item) => {
+			return item
 		})
-			this.setState({resultyt});
+		this.setState({data})
 	}
 
-	getTitle(responseJson){
-		const titleyt = responseJson.items.map((item) => {
-					return item.snippet.title;
-		})
-			this.setState({titleyt});
-	}		
+
 	render(){
-		console.log(this.state.resultyt);
-		console.log(this.state.titleyt);
+		console.log(this.state.data);
+
 		return(
 			<section className="wrapper style2">
 				<div className="banner-youtube">
-						<img src={img} />
+
 				</div>
 				<div className="inner">
-					
+
 					<header>
 							<h2>
 								Ihatetomatoes
 							</h2>
 							<p>Great Videos</p>
 					</header>
-					<div className="flex flex-tabs">
+					<div className="flex flex-3">
 						<div className="tabs">
 							<div className="tab  flex flex-3 active">
-								
-									
-									{this.state.resultyt.map((link, i) => {
-										let frame = 
-										<div key={i}  className="video col" >
-											<div className="image fit">
-												<iframe  className="youtube"  src={link} frameBorder="0"  allowFullScreen></iframe>
+								{this.state.data.map((vid, i) => {
+										return(
+											<div key={i} className="video col">
+												<div className="image fit">
+													<iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${vid.id.videoId}`} frameBorder="0" ></iframe>
+													<p key={i} className="caption">{vid.snippet.title}</p>
+												</div>
 											</div>
-											
-											})}	
-																				
-										</div>
-										return frame;
+
+										);
 									})}
-									
-								
 							</div>
 						</div>
 					</div>
-				</div>		
+				</div>
 				{this.frame}
 			</section>
 		);
-	}	
+	}
 }
 
 export default Youtube;
